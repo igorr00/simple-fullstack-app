@@ -6,6 +6,9 @@ require('dotenv').config();
 
 app.use(express.json());
 
+const cors = require('cors');
+app.use(cors());
+
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 
