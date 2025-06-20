@@ -1,13 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './HomeCustomer.css';
 import { useNavigate } from 'react-router-dom';
 
 function HomeCustomer() {
   const navigate = useNavigate();
 
+  const [products, setProducts] = useState([]);
+  const user = JSON.parse(localStorage.getItem('user'));
+  var userImage = user.picture;
+  if(userImage == ''){
+    userImage = './user-default.png'
+  }
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then((res) => res.json())
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch products:', err);
+      });
+  }, []);
   
   return (
-    <div className="customer-wrapper">
+    <div className="home-customer">
+      <header className="top-nav">
+        <img src={`http://localhost:5000/images/user-default.png`} alt="Profile" className="profile-pic" />
+        <nav className="nav-links">
+          <a href="/"><b>Home</b></a>
+          <a href="/homeCustomer"><b>Products</b></a>
+          <a href="/"><b>Profile</b></a>
+        </nav>
+      </header>
       <div className="blob blob-top-right">
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -31,9 +56,17 @@ function HomeCustomer() {
           <path fill="url(#grad2)" d="M29.3,-43.4C39.2,-33,49.5,-26.2,52.9,-16.9C56.3,-7.6,52.9,4.2,50.6,18C48.3,31.8,47.1,47.5,38.9,55.3C30.6,63,15.3,62.9,0.7,61.9C-13.9,60.9,-27.7,59.1,-33.5,50.5C-39.3,41.9,-36.9,26.6,-32.8,16.1C-28.7,5.7,-22.8,0.1,-26.1,-14.2C-29.3,-28.5,-41.7,-51.5,-38.9,-64.1C-36.1,-76.8,-18,-79.1,-4.2,-73.3C9.6,-67.5,19.3,-53.7,29.3,-43.4Z" transform="translate(100 100)" />
         </svg>
       </div>
-      <div className="customer-card">
-        <h2 className="gradient-title">HomeCustomer</h2>
-        </div>
+      <main className="products-container">
+        {products.map((product) => (
+          <div className="product-card" key={product.id}>
+            <img src={`http://localhost:5000/${product.picture}`} alt={product.name} />
+            <div className="product-info">
+              <p className="product-name">{product.name}</p>
+              <p className="product-price">${product.price.toFixed(2)}</p>
+            </div>
+          </div>
+        ))}
+      </main>
     </div>
   );
 }

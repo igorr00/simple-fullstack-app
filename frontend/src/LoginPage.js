@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './LoginPage.css';
 import { useNavigate } from 'react-router-dom';
+import { FaUser, FaLock } from 'react-icons/fa';
 
 function LoginPage() {
   const navigate = useNavigate();
@@ -69,25 +70,31 @@ function LoginPage() {
         <h2 className="gradient-title">Hello</h2>
         <p>Sign in to your account</p>
         <form className="login-form" onSubmit={handleLogin}>
-          <input
-            type="email"
-            placeholder="Email"
-            className="login-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <input
-            type="password"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') handleLogin(e);
-            }}
-            placeholder="Password"
-            className="login-input"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div className="input-wrapper">
+            <FaUser className="input-icon" /> 
+            <input
+              type="email"
+              placeholder="Email"
+              className="login-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div className="input-wrapper">
+            <FaLock className="input-icon" />
+            <input
+              type="password"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleLogin(e);
+              }}
+              placeholder="Password"
+              className="login-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            </div>
         </form>
         <p id='forgotpassword'>Forgot your password?</p>
         {error && <p className="login-error">{error}</p>}
