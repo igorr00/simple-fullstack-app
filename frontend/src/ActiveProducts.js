@@ -44,14 +44,14 @@ const ActiveProducts = () => {
   };
 
   return (
-    <div className="active-products-page">
+    <div className="active-products">
         <header className="top-nav">
             <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" />
             <nav className="nav-links">
             <a href="/"><b>Home</b></a>
-            <a href="/ActiveProducts"><b>Products</b></a>
-            <a href="/Users"><b>Users</b></a>
-            <a href="/Profile"><b>Profile</b></a>
+            <a href="/activeProducts"><b>Products</b></a>
+            <a href="/users"><b>Users</b></a>
+            <a href="/profile"><b>Profile</b></a>
             </nav>
         </header>
 

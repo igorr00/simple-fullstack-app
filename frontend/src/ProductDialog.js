@@ -95,7 +95,7 @@ const ProductDialog = ({ product, onClose }) => {
             />
           )}
 
-          <button type="submit">{product ? 'Update' : 'Add'} Product</button>
+          <button className='btn-edit-add' type="submit">{product ? 'Update' : 'Add'} Product</button>
         </form>
       </div>
     </div>
