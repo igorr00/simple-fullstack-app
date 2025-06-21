@@ -2,15 +2,13 @@ import React, { useEffect, useState } from 'react';
 import './HomeAdmin.css';
 import { FaPlusSquare } from 'react-icons/fa';
 import { BiBarChartAlt2 } from 'react-icons/bi';
-import { useNavigate } from 'react-router-dom';
 
 function HomeAdmin() {
-  const navigate = useNavigate();
-
   const [productCount, setProductCount] = useState(0);
   const [userCount, setUserCount] = useState(0);
   const user = JSON.parse(localStorage.getItem('user'));
-  const userImage = user?.picture || '/images/user-default.png';
+  const isEmpty = (str) => str === null || str === undefined || str === '';
+  const userImage = isEmpty(user?.picture) ? 'images/user-default.png' : user.picture;
 
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
@@ -31,9 +29,9 @@ function HomeAdmin() {
         <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" />
         <nav className="nav-links">
           <a href="/"><b>Home</b></a>
-          <a href="/Products"><b>Products</b></a>
-          <a href="/Users"><b>Users</b></a>
-          <a href="/Profile"><b>Profile</b></a>
+          <a href="/activeProducts"><b>Products</b></a>
+          <a href="/users"><b>Users</b></a>
+          <a href="/profile"><b>Profile</b></a>
         </nav>
       </header>
 
@@ -60,7 +58,7 @@ function HomeAdmin() {
           <path fill="url(#grad2)" d="M29.3,-43.4C39.2,-33,49.5,-26.2,52.9,-16.9C56.3,-7.6,52.9,4.2,50.6,18C48.3,31.8,47.1,47.5,38.9,55.3C30.6,63,15.3,62.9,0.7,61.9C-13.9,60.9,-27.7,59.1,-33.5,50.5C-39.3,41.9,-36.9,26.6,-32.8,16.1C-28.7,5.7,-22.8,0.1,-26.1,-14.2C-29.3,-28.5,-41.7,-51.5,-38.9,-64.1C-36.1,-76.8,-18,-79.1,-4.2,-73.3C9.6,-67.5,19.3,-53.7,29.3,-43.4Z" transform="translate(100 100)" />
         </svg>
       </div>
-      <div className="main-content-wrapper">
+      <div className="main-content-wrapper-admin">
         <section className="stats-section">
           <div className="stat-card purple">
             <h1>{productCount}</h1>
@@ -75,11 +73,11 @@ function HomeAdmin() {
         <section className="quick-actions">
           <h3>Quick Actions</h3>
           <div className="action-grid">
-            <div className="action-card" onClick={() => window.location.href = '/Products'}>
+            <div className="action-card" onClick={() => window.location.href = '/activeProducts'}>
               <FaPlusSquare size={40} />
               <p>Add Products</p>
             </div>
-            <div className="action-card" onClick={() => window.location.href = '/Analytics'}>
+            <div className="action-card" onClick={() => window.location.href = '/analytics'}>
               <BiBarChartAlt2 size={40} />
               <p>Analytics</p>
             </div>

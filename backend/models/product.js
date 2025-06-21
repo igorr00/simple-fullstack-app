@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "accessories",
     },
     picture: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     sequelize,

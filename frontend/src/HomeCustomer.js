@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './HomeCustomer.css';
-import { useNavigate } from 'react-router-dom';
 
 function HomeCustomer() {
-  const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
   const user = JSON.parse(localStorage.getItem('user'));
-  var userImage = user.picture;
-  if(userImage == ''){
-    userImage = './user-default.png'
-  }
+  const isEmpty = (str) => str === null || str === undefined || str === '';
+  const userImage = isEmpty(user?.picture) ? 'images/user-default.png' : user.picture;
 
   useEffect(() => {
     fetch('http://localhost:5000/api/products')
@@ -26,11 +22,11 @@ function HomeCustomer() {
   return (
     <div className="home-customer">
       <header className="top-nav">
-        <img src={`http://localhost:5000/images/user-default.png`} alt="Profile" className="profile-pic" />
+        <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" />
         <nav className="nav-links">
           <a href="/"><b>Home</b></a>
           <a href="/homeCustomer"><b>Products</b></a>
-          <a href="/"><b>Profile</b></a>
+          <a href="/profile"><b>Profile</b></a>
         </nav>
       </header>
       <div className="blob blob-top-right">
