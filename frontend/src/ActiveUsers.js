@@ -1,50 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './ActiveProducts.css';
-import ProductDialog from './ProductDialog';
-import { FaPlusSquare } from 'react-icons/fa';
+import './ActiveUsers.css';
+import { FaTrashAlt } from 'react-icons/fa';
 
-const ActiveProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+const ActiveUsers = () => {
+  const [users, setUsers] = useState([]);
   const user = JSON.parse(localStorage.getItem('user'));
   const isEmpty = (str) => str === null || str === undefined || str === '';
   const userImage = isEmpty(user?.picture) ? 'images/user-default.png' : user.picture;
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
-    fetchProducts();
+    fetchUsers();
   }, []);
 
-  const fetchProducts = () => {
-    axios.get('http://localhost:5000/api/products')
-      .then(res => setProducts(res.data))
+  const fetchUsers = () => {
+    axios.get('http://localhost:5000/api/users')
+      .then(res => setUsers(res.data))
       .catch(err => console.error(err));
   };
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:5000/api/products/${id}`)
-      .then(() => setProducts(products.filter(p => p.id !== id)))
+    axios.delete(`http://localhost:5000/api/users/${id}`)
+      .then(() => setUsers(users.filter(p => p.id !== id)))
       .catch(err => console.error(err));
   };
 
-  const handleEdit = (product) => {
-    setSelectedProduct(product);
-    setDialogOpen(true);
-  };
-
-  const handleAdd = () => {
-    setSelectedProduct(null);
-    setDialogOpen(true);
-  };
-
-  const handleDialogClose = (updated) => {
-    setDialogOpen(false);
-    if (updated) fetchProducts();
-  };
-
   return (
-    <div className="active-products">
+    <div className="active-users">
         <header className="top-nav">
             <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" />
             <nav className="nav-links">
@@ -80,42 +63,38 @@ const ActiveProducts = () => {
         </div>
 
         <div className='main-content-wrapper'>
-      <div className="products-list-card">
-        <h3>Active Products</h3>
+      <div className="users-list-card">
+        <h3>Active Users</h3>
         <hr />
-        {products.map(product => (
-          <div className="product-row" key={product.id}>
-            <div className="product-info">
-              <p className="product-name">{product.name}</p>
-              <p className="product-price">${product.price.toFixed(2)}</p>
+        {users.map(u => (
+          <div
+            className={`users-row ${selectedUserId === u.id ? 'selected' : ''}`}
+            key={u.id}
+            onClick={() => setSelectedUserId(selectedUserId === u.id ? null : u.id)} >
+            <div className="user-image">
+              <img src={`http://localhost:5000/${u.picture}`} alt="ProfileUser" className="user-pic" />
+              <p className="user-name">{u.firstName} {u.lastName}</p>
             </div>
-            <div className="product-actions">
-              <button className="btn-edit" onClick={() => handleEdit(product)}>Edit</button>
-              <button className="btn-delete" onClick={() => handleDelete(product.id)}>Delete</button>
+            <div className="user-actions">
+              <p className="user-email">{u.email}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div className="side-panel">
-        <div className="stat-tile">
-          <h1>{products.length}</h1>
+      <div className="side-panel-users">
+        <div className="stat-tile-users">
+          <h1>{users.length}</h1>
           <p>Total</p>
         </div>
-        <div className="action-tile" onClick={() => handleAdd()}>
-            <FaPlusSquare size={40} />
-            <p>Add Products</p>
+        <div className="action-tile-users" onClick={() => handleDelete(selectedUserId)}>
+            <FaTrashAlt size={40} />
+            <p>Delete User</p>
         </div>
       </div>
-      {dialogOpen && (
-        <ProductDialog
-          product={selectedProduct}
-          onClose={handleDialogClose}
-        />
-      )}
     </div>
     </div>
   );
 };
 
-export default ActiveProducts;
+export default ActiveUsers;

@@ -55,7 +55,7 @@ const Analytics = () => {
             <nav className="nav-links">
             <a href="/"><b>Home</b></a>
             <a href="/activeProducts"><b>Products</b></a>
-            <a href="/users"><b>Users</b></a>
+            <a href="/activeUsers"><b>Users</b></a>
             <a href="/profile"><b>Profile</b></a>
             </nav>
         </header>
