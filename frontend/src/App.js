@@ -6,6 +6,7 @@ import HomeCustomer from './HomeCustomer';
 import ActiveProducts from './ActiveProducts';
 import Analytics from './Analytics';
 import ActiveUsers from './ActiveUsers';
+import Profile from './Profile';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/activeProducts" element={<ActiveProducts /> } />
         <Route path='/analytics' element={<Analytics /> } />
         <Route path="/activeUsers" element={<ActiveUsers /> } />
+        <Route path='/profile' element={<Profile /> } />
       </Routes>
     </Router>
   );

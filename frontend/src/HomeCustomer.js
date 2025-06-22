@@ -24,7 +24,7 @@ function HomeCustomer() {
       <header className="top-nav">
         <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" />
         <nav className="nav-links">
-          <a href="/"><b>Home</b></a>
+          <a href="/homeCustomer"><b>Home</b></a>
           <a href="/homeCustomer"><b>Products</b></a>
           <a href="/profile"><b>Profile</b></a>
         </nav>
