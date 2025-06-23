@@ -51,7 +51,7 @@ const Analytics = () => {
   return (
     <div className="analytics">
         <header className="top-nav">
-            <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" />
+            <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" onClick={() => window.location.href = '/profilePicture'} />
             <nav className="nav-links">
             <a href="/homeAdmin"><b>Home</b></a>
             <a href="/activeProducts"><b>Products</b></a>

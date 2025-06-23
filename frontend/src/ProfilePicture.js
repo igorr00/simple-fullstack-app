@@ -1,35 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import './ProfilePicture.css';
 import axios from 'axios';
-import './ActiveUsers.css';
-import { FaTrashAlt } from 'react-icons/fa';
+import { FaSignOutAlt } from 'react-icons/fa';
 
-const ActiveUsers = () => {
-  const [users, setUsers] = useState([]);
+const ProfilePicture = () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const isEmpty = (str) => str === null || str === undefined || str === '';
   const userImage = isEmpty(user?.picture) ? 'images/user-default.png' : user.picture;
-  const [selectedUserId, setSelectedUserId] = useState(null);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+  const [imageFile, setImageFile] = useState(null);
 
-  const fetchUsers = () => {
-    axios.get('http://localhost:5000/api/users')
-      .then(res => setUsers(res.data))
-      .catch(err => console.error(err));
-  };
+  var role = '';
+  if (user.role === 'admin') { role = 'Admin' }
+  else { role = 'Customer' }
 
-  const handleDelete = (id) => {
-    axios.delete(`http://localhost:5000/api/users/${id}`)
-      .then(() => setUsers(users.filter(p => p.id !== id)))
-      .catch(err => console.error(err));
-  };
+  const handleLogout = async (e) => {
+    localStorage.setItem('user', '');
+    window.location.href = '/';
+  }
+
+  const handleEditPicture = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    if (imageFile) formData.append('image', imageFile);
+
+   try {
+      await axios['put'](`http://localhost:5000/api/users/picture/${user.id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      });
+
+      handleLogout();
+
+    } catch (err) {
+      console.error('Error saving user', err);
+    }
+  }
 
   return (
     <div className="active-users">
         <header className="top-nav">
-            <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" onClick={() => window.location.href = '/profilePicture'} />
             <nav className="nav-links">
             <a href="/homeAdmin"><b>Home</b></a>
             <a href="/activeProducts"><b>Products</b></a>
@@ -62,39 +72,41 @@ const ActiveUsers = () => {
             </svg>
         </div>
 
-        <div className='main-content-wrapper'>
-      <div className="users-list-card">
-        <h3>Active Users</h3>
-        <hr />
-        {users.map(u => (
-          <div
-            className={`users-row ${selectedUserId === u.id ? 'selected' : ''}`}
-            key={u.id}
-            onClick={() => setSelectedUserId(selectedUserId === u.id ? null : u.id)} >
-            <div className="user-image">
-              <img src={`http://localhost:5000/${u.picture}`} alt="ProfileUser" className="user-pic" />
-              <p className="user-name">{u.firstName} {u.lastName}</p>
-            </div>
-            <div className="user-actions">
-              <p className="user-email">{u.email}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+        <div className="side-panel-profile">
+            <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" onClick={() => window.location.href = '/profilePicture'} />
+            <p className="profile-settings-label">Personal information settings</p>
+            <p onClick={handleLogout} className="logout-link">
+                <FaSignOutAlt className="log-out-icon" /> Logout
+            </p>
+        </div>
 
-      <div className="side-panel-users">
-        <div className="stat-tile-users">
-          <h1>{users.length}</h1>
-          <p>Total</p>
+        <div className='main-content-wrapper'>
+            <div className="profile-picture-container">
+                <img src={`http://localhost:5000/images/user-default.png`} alt="Profile" className="edit-pic" />
+                <form onSubmit={handleEditPicture}>
+                    <label className='picture-label' ><b>Upload a picture</b></label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setImageFile(e.target.files[0])}
+                    />
+
+                    {imageFile && (
+                        <img
+                        src={URL.createObjectURL(imageFile)}
+                        alt="Preview"
+                        style={{ width: '100px', marginTop: '1rem' }}
+                        />
+                    )}
+                    <div className="form-actions">
+                        <button type="button" className="cancel-btn" onClick={() => window.location.href = '/home' + role}>Cancel</button>
+                        <button type="submit" className="save-btn">Save</button>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div className="action-tile-users" onClick={() => handleDelete(selectedUserId)}>
-            <FaTrashAlt size={40} />
-            <p>Delete User</p>
-        </div>
-      </div>
-    </div>
     </div>
   );
 };
 
-export default ActiveUsers;
+export default ProfilePicture;

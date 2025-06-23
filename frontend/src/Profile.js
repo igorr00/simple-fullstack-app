@@ -14,6 +14,10 @@ const Profile = () => {
   const [contactNumber, setContactNumber] = useState(user.contactNumber);
   const [password, setPassword] = useState(user.password);
 
+  var role = '';
+  if (user.role === 'admin') { role = 'Admin' }
+  else { role = 'Customer' }
+
   const handleLogout = async (e) => {
     localStorage.setItem('user', '');
     window.location.href = '/';
@@ -71,7 +75,7 @@ const Profile = () => {
         </div>
 
         <div className="side-panel-profile">
-            <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" />
+            <img src={`http://localhost:5000/${userImage}`} alt="Profile" className="profile-pic" onClick={() => window.location.href = '/profilePicture'} />
             <p className="profile-settings-label">Personal information settings</p>
             <p onClick={handleLogout} className="logout-link">
                 <FaSignOutAlt className="log-out-icon" /> Logout
@@ -141,7 +145,7 @@ const Profile = () => {
                     </div>
                     </div>
                     <div className="form-actions">
-                        <button type="button" className="cancel-btn">Cancel</button>
+                        <button type="button" className="cancel-btn" onClick={() => window.location.href = '/home' + role }>Cancel</button>
                         <button type="submit" className="save-btn">Save</button>
                     </div>
                 </form>
