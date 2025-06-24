@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: simple-fullstack-app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend
+    restart: always
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+      - ./backend/images:/app/images
+    environment:
+      DB_NAME: simple-fullstack-app
+      DB_USER: postgres
+      DB_PASSWORD: root
+      DB_HOST: db
+      DB_PORT: 5432
+      PORT: 5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  db-data:
