@@ -65,8 +65,8 @@ Create a .env file:
 
 ```env
 DB_NAME=simple-fullstack-app
-DB_USER=postgres
-DB_PASSWORD=root
+DB_USER=your_postgres_user
+DB_PASSWORD=your_postgres_password
 DB_HOST=localhost
 DB_PORT=5432
 PORT=5000
@@ -92,17 +92,6 @@ React runs at http://localhost:3000.
 ```
 
 Running with Docker
-
-Make sure your .env in /backend contains:
-
-```env
-DB_NAME=simple-fullstack-app
-DB_USER=postgres
-DB_PASSWORD=root
-DB_HOST=db
-DB_PORT=5432
-PORT=5000
-```
 
 Run the app:
 ```bash
